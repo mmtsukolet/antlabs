@@ -67,3 +67,33 @@
     {{ knp_pagination_render(pagination) }}
     
 {% endblock %}
+
+{% block stylesheets %}
+        
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center; /* Center the pagination */
+        margin: 20px 0; /* Space around pagination */
+    }
+    .pagination span {
+        padding: 10px 15px; /* Padding for span elements */
+        margin: 0 5px; /* Space between spans */
+        border: 1px solid #007bff; /* Border for spans */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Change cursor on hover */
+        background-color: #f8f9fa; /* Background color */
+        color: #007bff; /* Text color */
+    }
+    .pagination span:hover {
+        background-color: #007bff; /* Background on hover */
+        color: white; /* Text color on hover */
+    }
+    .pagination .active span {
+        background-color: #007bff; /* Active page color */
+        color: white; /* Active text color */
+        border: none; /* Remove border for active */
+        }
+</style>
+
+{% endblock %}
