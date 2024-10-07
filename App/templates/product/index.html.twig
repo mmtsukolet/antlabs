@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron"><h1>Product index</h1></div>
+
+
+    <div style="margin: 0px;">
+        <div class="row">
+            <div class="col-md-9">
+                <form method="get" action="{{ path('app_product_index') }}">
+                <input type="text" name="search" value="{{ search }}" placeholder="Search products">
+                <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <a href="{{ path('app_product_new') }}" class="btn btn-warning">Create New</a>
+                <a href="{{ path('import_csv') }}" class="btn btn-primary">Import CSV</a>
+                <a href="{{ path('export_csv') }}" class="btn btn-success">Export CSV</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>
+                    <a href="{{ path('app_product_index', { search: search, sort: 'name', order: sortField == 'name' and sortOrder == 'asc' ? 'desc' : 'asc' }) }}">
+                        Name
+                        {% if sortField == 'name' %}
+                            {{ sortOrder == 'asc' ? '▲' : '▼' }}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Created</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in pagination.items %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.created ? product.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
+                    <a class="btn btn-success" href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(pagination) }}
+    
+{% endblock %}
+
+{% block stylesheets %}
+        
+<style>
+   /* .pagination {
+        display: flex;
+        justify-content: center; /* Center the pagination */
+        margin: 20px 0; /* Space around pagination */
+    }
+    .pagination span {
+        padding: 10px 15px; /* Padding for span elements */
+        margin: 0 5px; /* Space between spans */
+        border: 1px solid #007bff; /* Border for spans */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Change cursor on hover */
+        background-color: #f8f9fa; /* Background color */
+        color: #007bff; /* Text color */
+    }
+    .pagination span:hover {
+        background-color: #007bff; /* Background on hover */
+        color: white; /* Text color on hover */
+    }
+    .pagination .active span {
+        background-color: #007bff; /* Active page color */
+        color: white; /* Active text color */
+        border: none; /* Remove border for active */
+    } */
+</style>
+
+{% endblock %}
