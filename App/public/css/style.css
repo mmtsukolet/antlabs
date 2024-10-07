@@ -1,0 +1,43 @@
+/* Style the pagination container */
+.pagination {
+    display: flex; /* Use flexbox to display items inline */
+    justify-content: center; /* Center pagination items */
+    list-style: none; /* Remove bullet points */
+    padding: 0; /* No padding */
+    margin: 20px 0; /* Add space above and below pagination */
+}
+
+/* Style each pagination item */
+.pagination-item {
+    display: inline-block; /* Ensure inline-block display */
+    padding: 10px 15px; /* Add padding around each item */
+    margin: 0 5px; /* Space between each pagination item */
+    color: #007bff; /* Default text color */
+    background-color: #f8f9fa; /* Light background color */
+    border: 1px solid #007bff; /* Add a border */
+    border-radius: 4px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    cursor: pointer;
+}
+
+/* Hover effect */
+.pagination-item:hover {
+    background-color: #007bff; /* Change background color on hover */
+    color: white; /* White text on hover */
+}
+
+/* Active page styling */
+.pagination-item.active {
+    background-color: #007bff; /* Active page background */
+    color: white; /* Active page text color */
+    border-color: #007bff; /* Match border to background */
+}
+
+/* Disabled page styling */
+.pagination-item.disabled {
+    color: #6c757d; /* Grey color for disabled items */
+    background-color: transparent; /* Transparent background */
+    border-color: #dee2e6; /* Light border for disabled items */
+    cursor: not-allowed; /* Show disabled cursor */
+}
