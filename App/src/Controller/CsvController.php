@@ -78,21 +78,45 @@ class CsvController extends AbstractController
     }
 
     #[Route('/export', name: 'export_csv')]
-    public function exportCsv(EntityManagerInterface $em): Response
+    public function exportCsv(EntityManagerInterface $em)
     {
-        $products = $em->getRepository(Product::class)->findAll();
+         // Get the total number of products
+        $totalProducts = $em->getRepository(Product::class)->count([]);
+        $batchSize = 10;
 
-        $chunkedProducts = array_chunk($products, 10);
+        // Loop through the products in batches
+        for ($offset = 0; $offset < $totalProducts; $offset += $batchSize) {
+            // Fetch products in batches of 10
+            $products = $em->getRepository(Product::class)->findBy([], null, $batchSize, $offset);
 
-        foreach ($chunkedProducts as $key => $chunk) {
-            // code...
-            $response = new Response();
-            $response->setContent($this->generateCsvContent($chunk));
-            $response->headers->set('Content-Type', 'text/csv');
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$key'.csv"');
+            // Create a unique filename for each batch
+            $filePath = 'products_batch_' . ($offset / $batchSize + 1) . '.csv';
 
-            return $response;
+            // Open a file for writing the current batch
+            $file = fopen($filePath, 'w');
+
+            // Add CSV headers
+            fputcsv($file, ['ID', 'Name', 'Price', 'Description']); // Adjust headers according to your Product fields
+
+            // Process and export the batch of products
+            foreach ($products as $product) {
+                // Write product details to the CSV file
+                fputcsv($file, [
+                    $product->getId(),
+                    $product->getName(),
+                    $product->getPrice(),
+                    $product->getDescription(),
+                ]);
+            }
+
+            // Close the file after writing the batch
+            fclose($file);
+
+            // Optional: Print processing message
+            echo "Exported batch starting from offset {$offset} to {$filePath}.\n";
         }
+
+        // return;
 
     }
 
