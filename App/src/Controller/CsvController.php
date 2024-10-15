@@ -82,12 +82,18 @@ class CsvController extends AbstractController
     {
         $products = $em->getRepository(Product::class)->findAll();
 
-        $response = new Response();
-        $response->setContent($this->generateCsvContent($products));
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="products.csv"');
+        $chunkedProducts = array_chunk($products, 10);
 
-        return $response;
+        foreach ($chunkedProducts as $key => $chunk) {
+            // code...
+            $response = new Response();
+            $response->setContent($this->generateCsvContent($chunk));
+            $response->headers->set('Content-Type', 'text/csv');
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$key'.csv"');
+
+            return $response;
+        }
+
     }
 
     private function generateCsvContent($products): string
